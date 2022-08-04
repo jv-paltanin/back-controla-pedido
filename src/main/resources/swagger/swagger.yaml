@@ -1,0 +1,468 @@
+swagger: "2.0"
+info:
+  description: API para controle de pedido (Trabalho Desenvolvimento Web)
+  version: "1"
+  title: ControlRequest API
+  contact:
+    name: João V. Paltanin
+    url: "https://www.linkedin.com/in/jo%C3%A3o-victor-paltanin"
+    email: joaovpaltanin116@gmail.com
+host: "localhost:8080"
+basePath: /
+tags:
+  - name: Clientes
+    description: Gerencia os clientes
+  - name: Produtos
+    description: Gerencia os produtos
+  - name: Pedidos
+    description: Gerencia os pedidos
+paths:
+  /clientes:
+    get:
+      tags:
+        - Clientes
+      summary: Lista os Clientes
+      operationId: listarUsingGET
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/ClienteModel"
+        "406":
+          description: Recurso não possui representação que poderia ser aceita pelo consumidor
+        "500":
+          description: Erro interno do servidor
+      deprecated: false
+    post:
+      tags:
+        - Clientes
+      summary: Cadastra um Cliente
+      operationId: adicionarUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: corpo
+          description: Representação de um novo Cliente
+          required: true
+          schema:
+            $ref: "#/definitions/ClienteModel"
+      responses:
+        "201":
+          description: Cliente cadastrado
+          schema:
+            $ref: "#/definitions/ClienteModel"
+        "400":
+          description: Requisição inválida (erro do cliente)
+        "406":
+          description: Recurso não possui representação que poderia ser aceita pelo consumidor
+        "415":
+          description: Requisição recusada porque o corpo está em um formato não suportado
+        "500":
+          description: Erro interno no servidor
+      deprecated: false
+  "/clientes/{ClienteId}":
+    get:
+      tags:
+        - Clientes
+      summary: Busca um Cliente por ID
+      operationId: buscarUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: ClienteId
+          in: path
+          description: ID de um Cliente
+          required: true
+          type: integer
+          format: int64
+          x-example: 1
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/ClienteModel"
+        "400":
+          description: ID do Cliente inválido
+        "404":
+          description: Cliente não encontrado
+        "406":
+          description: Recurso não possui representação que poderia ser aceita pelo consumidor
+        "500":
+          description: Erro interno do servidor
+      deprecated: false
+    put:
+      tags:
+        - Clientes
+      summary: Atualiza um Cliente por ID
+      operationId: atualizarUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: ClienteId
+          in: path
+          description: ID de um Cliente
+          required: true
+          type: integer
+          format: int64
+          x-example: 1
+        - in: body
+          name: corpo
+          description: Representação de um Cliente com os novos dados
+          required: true
+          schema:
+            $ref: "#/definitions/ClienteModel"
+      responses:
+        "200":
+          description: Cliente atualizado
+          schema:
+            $ref: "#/definitions/ClienteModel"
+        "400":
+          description: Requisição inválida (erro do cliente)
+        "404":
+          description: Cliente não encontrado
+        "406":
+          description: Recurso não possui representação que poderia ser aceita pelo consumidor
+        "415":
+          description: Requisição recusada porque o corpo está em um formato não suportado
+        "500":
+          description: Erro interno no servidor
+      deprecated: false
+    delete:
+      tags:
+        - Clientes
+      summary: Exclui um Cliente por ID
+      operationId: removerUsingDELETE
+      produces:
+        - application/json
+      parameters:
+        - name: ClienteId
+          in: path
+          description: ID de um Cliente
+          required: true
+          type: integer
+          format: int64
+          x-example: 1
+      responses:
+        "204":
+          description: Cliente excluído
+        "400":
+          description: Requisição inválida (erro do cliente)
+        "404":
+          description: Cliente não encontrado
+        "500":
+          description: Erro interno no servidor
+      deprecated: false
+  /produtos:
+    get:
+      tags:
+        - Produtos
+      summary: Lista os Produtos
+      operationId: listarUsingGET_1
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/ProdutoModel"
+        "406":
+          description: Recurso não possui representação que poderia ser aceita pelo consumidor
+        "500":
+          description: Erro interno do servidor
+      deprecated: false
+    post:
+      tags:
+        - Produtos
+      summary: Cadastra um Produto
+      operationId: adicionarUsingPOST_1
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: corpo
+          description: Representação de um novo Produto
+          required: true
+          schema:
+            $ref: "#/definitions/ProdutoModel"
+      responses:
+        "201":
+          description: Produto cadastrado
+          schema:
+            $ref: "#/definitions/ProdutoModel"
+        "400":
+          description: Requisição inválida (erro do cliente)
+        "406":
+          description: Recurso não possui representação que poderia ser aceita pelo consumidor
+        "415":
+          description: Requisição recusada porque o corpo está em um formato não suportado
+        "500":
+          description: Erro interno no servidor
+      deprecated: false
+  "/produtos/{ProdutoId}":
+    get:
+      tags:
+        - Produtos
+      summary: Busca um Produto por ID
+      operationId: buscarUsingGET_1
+      produces:
+        - application/json
+      parameters:
+        - name: ProdutoId
+          in: path
+          description: ID de um Produto
+          required: true
+          type: integer
+          format: int64
+          x-example: 1
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/ProdutoModel"
+        "400":
+          description: ID do Produto inválido
+        "404":
+          description: Produto não encontrado
+        "406":
+          description: Recurso não possui representação que poderia ser aceita pelo consumidor
+        "500":
+          description: Erro interno do servidor
+      deprecated: false
+    put:
+      tags:
+        - Produtos
+      summary: Atualiza um Produto por ID
+      operationId: atualizarUsingPUT_1
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: ProdutoId
+          in: path
+          description: ID de um Produto
+          required: true
+          type: integer
+          format: int64
+          x-example: 1
+        - in: body
+          name: corpo
+          description: Representação de um Produto com os novos dados
+          required: true
+          schema:
+            $ref: "#/definitions/ProdutoModel"
+      responses:
+        "200":
+          description: Produto atualizado
+          schema:
+            $ref: "#/definitions/ProdutoModel"
+        "400":
+          description: Requisição inválida (erro do cliente)
+        "404":
+          description: Produto não encontrado
+        "406":
+          description: Recurso não possui representação que poderia ser aceita pelo consumidor
+        "415":
+          description: Requisição recusada porque o corpo está em um formato não suportado
+        "500":
+          description: Erro interno no servidor
+      deprecated: false
+    delete:
+      tags:
+        - Produtos
+      summary: Exclui um Produto por ID
+      operationId: removerUsingDELETE_1
+      produces:
+        - application/json
+      parameters:
+        - name: ProdutoId
+          in: path
+          description: ID de um Produto
+          required: true
+          type: integer
+          format: int64
+          x-example: 1
+      responses:
+        "204":
+          description: Produto excluído
+        "400":
+          description: Requisição inválida (erro do cliente)
+        "404":
+          description: Produto não encontrado
+        "500":
+          description: Erro interno no servidor
+      deprecated: false
+  /pedidos:
+    get:
+      tags:
+        - Pedidos
+      summary: Lista os Pedidos
+      operationId: listarUsingGET_2
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/PedidoModel"
+        "406":
+          description: Recurso não possui representação que poderia ser aceita pelo consumidor
+        "500":
+          description: Erro interno do servidor
+      deprecated: false
+    post:
+      tags:
+        - Pedidos
+      summary: Cadastra um Pedido
+      operationId: adicionarUsingPOST_2
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: corpo
+          description: Representação de um novo Pedido
+          required: true
+          schema:
+            $ref: "#/definitions/PedidoModel"
+      responses:
+        "201":
+          description: Pedido cadastrado
+          schema:
+            $ref: "#/definitions/PedidoModel"
+        "400":
+          description: Requisição inválida (erro do cliente)
+        "406":
+          description: Recurso não possui representação que poderia ser aceita pelo consumidor
+        "415":
+          description: Requisição recusada porque o corpo está em um formato não suportado
+        "500":
+          description: Erro interno no servidor
+      deprecated: false
+  "/pedidos/{PedidoId}":
+    get:
+      tags:
+        - Pedidos
+      summary: Busca um Pedido por ID
+      operationId: buscarUsingGET_2
+      produces:
+        - application/json
+      parameters:
+        - name: PedidoId
+          in: path
+          description: ID de um Pedido
+          required: true
+          type: integer
+          format: int64
+          x-example: 1
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/PedidoModel"
+        "400":
+          description: ID do Pedido inválido
+        "404":
+          description: Pedido não encontrado
+        "406":
+          description: Recurso não possui representação que poderia ser aceita pelo consumidor
+        "500":
+          description: Erro interno do servidor
+      deprecated: false
+definitions:
+  ClienteModel:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 1
+      cpf:
+        type: integer
+        example: 10020030040
+      nome:
+        type: string
+        example: João
+      sobrenome:
+        type: string
+        example: Victor
+    title: ClienteModel
+  ProdutoModel:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 1
+      descricao:
+        type: string
+        example: Caneta Azul
+    title: ProdutoModel
+  PedidoModel:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+        example: 1
+      data:
+        type: string
+        example: dd/MM/yyyy
+      item:
+        type: object
+        properties:
+          produto:
+            $ref: "#/definitions/ProdutoModel"
+          quantidade:
+            type: integer
+            example: 100
+    title: PedidoModel
+  ObjetoProblema:
+    type: object
+    properties:
+      name:
+        type: string
+        example: cpf
+      userMessage:
+        type: string
+        example: O cpf é obrigatório
+    title: ObjetoProblema
+  Problema:
+    type: object
+    properties:
+      status:
+        type: integer
+        format: int32
+        example: 400
+      timestamp:
+        type: string
+        format: date-time
+        example: "2019-12-01T18:09:02.70844Z"
+      type:
+        type: string
+        example: "https://algafood.com.br/dados-invalidos"
+      title:
+        type: string
+        example: Dados inválidos
+      detail:
+        type: string
+        example: Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.
+      userMessage:
+        type: string
+        example: Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.
+      objects:
+        type: array
+        description: Lista de objetos ou campos que geraram o erro (opcional)
+        items:
+          $ref: "#/definitions/ObjetoProblema"
+    title: Problema
