@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,12 +54,22 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    @Transactional
     public ResponseEntity<Cliente> updateCliente(@PathVariable Long id, @RequestBody Cliente clienteDetails) {
         Cliente updateCliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new ResourceException("Cliente não encontrado com esse ID: " + id));
+                .orElseThrow(() -> new ResourceException("Cliente nao encontrado com esse ID: " + id));
 
-        return ResponseEntity.notFound().build();
+        updateCliente.setNome(clienteDetails.getNome());
+        updateCliente.setSobrenome(clienteDetails.getSobrenome());
+
+        clienteRepository.save(updateCliente);
+
+        return ResponseEntity.ok(updateCliente);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCliente(@PathVariable Long id) {
+        clienteRepository.deleteById(id);
     }
 
 }
