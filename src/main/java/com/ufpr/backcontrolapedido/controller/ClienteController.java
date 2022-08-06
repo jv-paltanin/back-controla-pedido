@@ -8,17 +8,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ufpr.backcontrolapedido.exception.ResourceException;
 import com.ufpr.backcontrolapedido.model.Cliente;
 import com.ufpr.backcontrolapedido.repository.ClienteRepository;
 
+@CrossOrigin("*") // mecanismo que permite que recursos restritos sejam recuperados por outro
+                  // domínio
 @RestController
 @RequestMapping("clientes")
 public class ClienteController {
@@ -47,16 +52,13 @@ public class ClienteController {
         return ResponseEntity.notFound().build();
     }
 
-    // @PutMapping("/{id}")
-    // @Transactional
-    // public ResponseEntity<Cliente> atualizar(@PathVariable Long id, @RequestBody
-    // @Valid AtualizarCursoForm form) {
-    // Optional<Cliente> optional = clienteRepository.findById(id);
-    // if (optional.isPresent()) {
-    // Cliente cliente = form.atualizar(id, clienteRepository);
-    // return ResponseEntity.ok(cliente);
-    // }
-    // return ResponseEntity.notFound().build();
-    // }
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<Cliente> updateCliente(@PathVariable Long id, @RequestBody Cliente clienteDetails) {
+        Cliente updateCliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceException("Cliente não encontrado com esse ID: " + id));
+
+        return ResponseEntity.notFound().build();
+    }
 
 }
