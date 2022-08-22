@@ -22,7 +22,7 @@ import com.ufpr.backcontrolapedido.model.dto.ClienteDTO;
 import com.ufpr.backcontrolapedido.service.ClienteService;
 
 @CrossOrigin("*") // mecanismo que permite que recursos restritos sejam recuperados por outro
-                  // domínio
+                  // domínio (anotação para uma classe específica)
 @RestController
 @RequestMapping("clientes")
 public class ClienteController {
