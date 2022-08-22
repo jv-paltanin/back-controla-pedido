@@ -55,7 +55,7 @@ public class ClienteService {
     // método encapsulado para recuperar entidade cliente por id do banco de dados
     private Cliente getEntityById(Long id) {
         Optional<Cliente> result = clienteRepository.findById(id);
-        return result.orElseThrow(() -> new ResourceNotFoundException("Objeto não encontrado."));
+        return result.orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado."));
     }
 
     // método encapsulado que transfere objeto DTO (Data transfer object) para a
