@@ -1,10 +1,9 @@
 package com.ufpr.backcontrolapedido.controller;
 
+import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,60 +15,51 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ufpr.backcontrolapedido.exception.ResourceException;
-import com.ufpr.backcontrolapedido.model.Cliente;
-import com.ufpr.backcontrolapedido.repository.ClienteRepository;
+import com.ufpr.backcontrolapedido.model.dto.ClienteDTO;
+import com.ufpr.backcontrolapedido.service.ClienteService;
 
 @CrossOrigin("*") // mecanismo que permite que recursos restritos sejam recuperados por outro
-                  // domínio
+                  // domínio (anotação para uma classe específica)
 @RestController
 @RequestMapping("clientes")
 public class ClienteController {
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClienteService clienteService;
 
     @GetMapping
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<Cliente> getClientes() {
-        return clienteRepository.findAll();
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Cliente registerCliente(@RequestBody Cliente cliente) {
-        return clienteRepository.save(cliente);
+    public ResponseEntity<List<ClienteDTO>> getClientes() {
+        List<ClienteDTO> list = clienteService.findAll();
+        return ResponseEntity.ok().body(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cliente> getClienteById(@PathVariable Long id) {
-        Optional<Cliente> cliente = clienteRepository.findById(id);
-        if (cliente.isPresent()) {
-            return ResponseEntity.ok(cliente.get());
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<ClienteDTO> getClienteById(@PathVariable Long id) {
+        ClienteDTO cliente = clienteService.findById(id);
+        return ResponseEntity.ok().body(cliente);
+    }
+
+    @PostMapping
+    public ResponseEntity<ClienteDTO> registerCliente(@RequestBody ClienteDTO cliente) {
+        cliente = clienteService.insert(cliente);
+        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").buildAndExpand(cliente.getId())
+                .toUri();
+        return ResponseEntity.created(uri).body(cliente);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> updateCliente(@PathVariable Long id, @RequestBody Cliente clienteDetails) {
-        Cliente updateCliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new ResourceException("Cliente nao encontrado com esse ID: " + id));
-
-        updateCliente.setNome(clienteDetails.getNome());
-        updateCliente.setSobrenome(clienteDetails.getSobrenome());
-
-        clienteRepository.save(updateCliente);
-
-        return ResponseEntity.ok(updateCliente);
+    public ResponseEntity<ClienteDTO> updateCliente(@PathVariable Long id, @RequestBody ClienteDTO cliente) {
+        cliente = clienteService.update(id, cliente);
+        return ResponseEntity.ok().body(cliente);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCliente(@PathVariable Long id) {
-        clienteRepository.deleteById(id);
+    public ResponseEntity<ClienteDTO> deleteCliente(@PathVariable Long id) {
+        clienteService.delete(id);
+        return ResponseEntity.noContent().build();
     }
-
 }

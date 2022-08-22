@@ -1,4 +1,4 @@
-package com.ufpr.backcontrolapedido.model;
+package com.ufpr.backcontrolapedido.model.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
