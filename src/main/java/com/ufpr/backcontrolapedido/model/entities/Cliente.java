@@ -16,6 +16,7 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true)
     private Long id;
     @Column(name = "cpf", nullable = false, length = 11)
     private Long cpf;
