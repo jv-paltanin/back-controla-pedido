@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.ufpr.backcontrolapedido.model.dto.ClienteDTO;
 import com.ufpr.backcontrolapedido.model.entities.Cliente;
 import com.ufpr.backcontrolapedido.repository.ClienteRepository;
+import com.ufpr.backcontrolapedido.repository.PedidoRepository;
+import com.ufpr.backcontrolapedido.service.exception.ResourceAlreadyExistsException;
 import com.ufpr.backcontrolapedido.service.exception.ResourceNotFoundException;
 
 @Service
@@ -17,6 +19,9 @@ public class ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     // recupera todos os clientes
     public List<ClienteDTO> findAll() {
@@ -32,10 +37,14 @@ public class ClienteService {
 
     // insere cliente no banco de dados
     public ClienteDTO insert(ClienteDTO dto) {
-        Cliente entity = new Cliente();
-        copyDtoToEntity(dto, entity);
-        entity = clienteRepository.save(entity);
-        return new ClienteDTO(entity);
+        if (!clienteRepository.existsClienteByCpf(dto.getCpf())) {
+            Cliente entity = new Cliente();
+            copyDtoToEntity(dto, entity);
+            entity = clienteRepository.save(entity);
+            return new ClienteDTO(entity);
+        } else {
+            throw new ResourceAlreadyExistsException("CPF " + dto.getCpf() + " já existe!");
+        }
     }
 
     // atualiza cliente no banco de dados
@@ -48,8 +57,11 @@ public class ClienteService {
 
     // deleta cliente por id
     public void delete(Long id) {
-        getEntityById(id);
-        clienteRepository.deleteById(id);
+        if (!pedidoRepository.existsPedidoByCliente(getEntityById(id))) {
+            clienteRepository.deleteById(id);
+        } else {
+            throw new ResourceAlreadyExistsException("Existe um ou mais pedidos vinculados a este cliente");
+        }
     }
 
     // método encapsulado para recuperar entidade cliente por id do banco de dados
