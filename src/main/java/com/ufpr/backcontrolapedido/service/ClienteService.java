@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.ufpr.backcontrolapedido.model.dto.ClienteDTO;
 import com.ufpr.backcontrolapedido.model.entities.Cliente;
 import com.ufpr.backcontrolapedido.repository.ClienteRepository;
+import com.ufpr.backcontrolapedido.service.exception.ResourceAlreadyExistsException;
 import com.ufpr.backcontrolapedido.service.exception.ResourceNotFoundException;
 
 @Service
@@ -32,10 +33,14 @@ public class ClienteService {
 
     // insere cliente no banco de dados
     public ClienteDTO insert(ClienteDTO dto) {
-        Cliente entity = new Cliente();
-        copyDtoToEntity(dto, entity);
-        entity = clienteRepository.save(entity);
-        return new ClienteDTO(entity);
+        if (!clienteRepository.existsClienteByCpf(dto.getCpf())) {
+            Cliente entity = new Cliente();
+            copyDtoToEntity(dto, entity);
+            entity = clienteRepository.save(entity);
+            return new ClienteDTO(entity);
+        } else {
+            throw new ResourceAlreadyExistsException("CPF " + dto.getCpf() + " já existe!");
+        }
     }
 
     // atualiza cliente no banco de dados
