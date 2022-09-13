@@ -29,8 +29,6 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
-    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
     @GetMapping
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public ResponseEntity<List<PedidoDTO>> getPedidos() {
@@ -47,6 +45,7 @@ public class PedidoController {
     @PostMapping
     public ResponseEntity<PedidoDTO> registerPedido(@RequestBody PedidoDTO pedido) {
         Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         pedido.setData(dateFormat.format(date));
         pedido = pedidoService.insert(pedido);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").buildAndExpand(pedido.getId())
