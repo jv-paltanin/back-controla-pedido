@@ -41,6 +41,12 @@ public class ClienteService {
         return new ClienteDTO(entity);
     }
 
+    // recupera cliente por nome
+    public ClienteDTO findByNome(String nome) {
+        Cliente entity = getEntityByNome(nome);
+        return new ClienteDTO(entity);
+    }
+
     // insere cliente no banco de dados
     public ClienteDTO insert(ClienteDTO dto) {
         if (!clienteRepository.existsClienteByCpf(dto.getCpf())) {
@@ -76,9 +82,15 @@ public class ClienteService {
         return result.orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado."));
     }
 
-    // método encapsulado para recuperar entidade cliente por id do banco de dados
+    // método encapsulado para recuperar entidade cliente por cpf do banco de dados
     private Cliente getEntityByCpf(Long cpf) {
         Optional<Cliente> result = clienteRepository.findByCpf(cpf);
+        return result.orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado."));
+    }
+
+    // método encapsulado para recuperar entidade cliente por nome do banco de dados
+    private Cliente getEntityByNome(String nome) {
+        Optional<Cliente> result = clienteRepository.findByNome(nome);
         return result.orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado."));
     }
 
