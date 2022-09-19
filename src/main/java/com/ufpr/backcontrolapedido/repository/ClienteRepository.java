@@ -11,7 +11,7 @@ import com.ufpr.backcontrolapedido.model.entities.Cliente;
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     boolean existsClienteByCpf(String cpf);
 
-    Optional<Cliente> findByCpf(Long cpf);
+    Optional<Cliente> findByCpf(String cpf);
 
     Optional<Cliente> findByNome(String nome);
 }

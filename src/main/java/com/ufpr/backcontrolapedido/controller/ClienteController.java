@@ -45,7 +45,7 @@ public class ClienteController {
 
     @GetMapping("cpf/{cpf}")
     public ResponseEntity<ClienteDTO> getClienteByCpf(@PathVariable Long cpf) {
-        ClienteDTO cliente = clienteService.findByCpf(cpf);
+        ClienteDTO cliente = clienteService.findByCpf(String.format("%011d", cpf));
         return ResponseEntity.ok().body(cliente);
     }
 

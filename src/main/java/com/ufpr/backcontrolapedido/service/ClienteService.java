@@ -36,7 +36,7 @@ public class ClienteService {
     }
 
     // recupera cliente por cpf
-    public ClienteDTO findByCpf(Long cpf) {
+    public ClienteDTO findByCpf(String cpf) {
         Cliente entity = getEntityByCpf(cpf);
         return new ClienteDTO(entity);
     }
@@ -83,7 +83,7 @@ public class ClienteService {
     }
 
     // método encapsulado para recuperar entidade cliente por cpf do banco de dados
-    private Cliente getEntityByCpf(Long cpf) {
+    private Cliente getEntityByCpf(String cpf) {
         Optional<Cliente> result = clienteRepository.findByCpf(cpf);
         return result.orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado."));
     }
