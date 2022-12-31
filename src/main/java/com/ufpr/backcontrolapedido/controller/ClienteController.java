@@ -43,6 +43,18 @@ public class ClienteController {
         return ResponseEntity.ok().body(cliente);
     }
 
+    @GetMapping("cpf/{cpf}")
+    public ResponseEntity<ClienteDTO> getClienteByCpf(@PathVariable Long cpf) {
+        ClienteDTO cliente = clienteService.findByCpf(String.format("%011d", cpf));
+        return ResponseEntity.ok().body(cliente);
+    }
+
+    @GetMapping("nome/{nome}")
+    public ResponseEntity<ClienteDTO> getClienteByCpf(@PathVariable String nome) {
+        ClienteDTO cliente = clienteService.findByNome(nome);
+        return ResponseEntity.ok().body(cliente);
+    }
+
     @PostMapping
     public ResponseEntity<ClienteDTO> registerCliente(@RequestBody ClienteDTO cliente) {
         cliente = clienteService.insert(cliente);
